@@ -5,22 +5,21 @@ import httpclient.Scope;
 import org.apache.http.HttpResponse;
 
 import java.io.IOException;
-import java.net.URISyntaxException;
 
 import static data.Constants.URL;
 
 public class Client {
-    public static HttpResponse executeGet(String resource) throws URISyntaxException, IOException {
+    public static HttpResponse executeGet(String resource) throws IOException {
         return Request
                 .getRequest(URL + resource)
-                .setBearerAuthentication(Authentication.getToken(Scope.READ)) // sets bearer token from request
+                .setBearerAuthentication(Authentication.getToken(Scope.READ))
                 .executeRequest();
     }
 
-    public static HttpResponse executePost(String resource, String body) throws URISyntaxException, IOException {
+    public static HttpResponse executePost(String resource, String body) throws IOException {
         return Request
                 .postRequest(URL + resource)
-                .setHeader("Content-Type", "application/json") // without it will get 415 status code
+                .setHeader("Content-Type", "application/json")
                 .setBearerAuthentication(Authentication.getToken(Scope.WRITE))
                 .setBody(body)
                 .executeRequest();

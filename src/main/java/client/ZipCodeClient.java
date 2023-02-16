@@ -1,10 +1,10 @@
 package client;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import data.Response;
 import org.apache.http.HttpResponse;
 
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -13,31 +13,31 @@ import static data.Constants.ZIPCODES_EXPAND_RESOURCE;
 import static data.Constants.ZIPCODES_RESOURCE;
 
 public class ZipCodeClient {
-    private static HttpResponse response;
-
-    public int getResponseStatusCode() {
-        return response.getStatusLine().getStatusCode();
+    public Response<List<String>> getZipCodesList() throws IOException {
+        Response<List<String>> response = new Response<>();
+        HttpResponse httpResponse = executeGetZipCodes();
+        response.setBody(getResponseAsList(httpResponse));
+        response.setStatusCode(httpResponse.getStatusLine().getStatusCode());
+        return response;
     }
 
-    public List<String> getZipCodesList() throws IOException, URISyntaxException {
-        response = executeGetZipCodes();
-        return getResponseAsList();
+    public Response<List<String>> addToZipCodesList(List<String> zipCodesList) throws IOException {
+        Response<List<String>> response = new Response<>();
+        HttpResponse httpResponse = executePostZipCodes(zipCodesList.toString());
+        response.setBody(getResponseAsList(httpResponse));
+        response.setStatusCode(httpResponse.getStatusLine().getStatusCode());
+        return response;
     }
 
-    public List<String> addToZipCodesList(List<String> zipCodesList) throws IOException, URISyntaxException {
-        response = executePostZipCodes(zipCodesList.toString());
-        return getResponseAsList();
-    }
-
-    private static HttpResponse executeGetZipCodes() throws IOException, URISyntaxException {
+    private static HttpResponse executeGetZipCodes() throws IOException {
         return Client.executeGet(ZIPCODES_RESOURCE);
     }
 
-    private static HttpResponse executePostZipCodes(String requestBody) throws IOException, URISyntaxException {
+    private static HttpResponse executePostZipCodes(String requestBody) throws IOException {
         return Client.executePost(ZIPCODES_EXPAND_RESOURCE, requestBody);
     }
 
-    private static List<String> getResponseAsList() throws IOException {
+    private static List<String> getResponseAsList(HttpResponse response) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         return Arrays.stream(mapper.readValue(response.getEntity().getContent(), String[].class))
                 .collect(Collectors.toList());
