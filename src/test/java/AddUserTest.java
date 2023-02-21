@@ -34,14 +34,14 @@ public class AddUserTest {
                 .sex(faker.demographic().sex().toUpperCase())
                 .zipCode(zipCode)
                 .build();
-        int postUserStatusCode = userClient.addToUsersList(user);
-        Response<List<User>> getUsersResponse = userClient.getUsersList();
-        Response<List<String>> getZipCodesResponse = zipCodeClient.getZipCodesList();
+        int responseStatusCode = userClient.addToUsersList(user);
+        Response<List<User>> usersResponse = userClient.getUsersList();
+        Response<List<String>> zipCodesResponse = zipCodeClient.getZipCodesList();
 
         Assertions.assertAll(
-                () -> Assertions.assertEquals(CREATED_STATUS, postUserStatusCode),
-                () -> Assertions.assertTrue(getUsersResponse.getBody().contains(user)),
-                () -> Assertions.assertFalse(getZipCodesResponse.getBody().contains(zipCode))
+                () -> Assertions.assertEquals(CREATED_STATUS, responseStatusCode),
+                () -> Assertions.assertTrue(usersResponse.getBody().contains(user)),
+                () -> Assertions.assertFalse(zipCodesResponse.getBody().contains(zipCode))
         );
     }
 
@@ -52,12 +52,12 @@ public class AddUserTest {
                 .name(faker.name().firstName())
                 .sex(faker.demographic().sex().toUpperCase())
                 .build();
-        int postUserStatusCode = userClient.addToUsersList(user);
-        Response<List<User>> getUsersResponse = userClient.getUsersList();
+        int responseStatusCode = userClient.addToUsersList(user);
+        Response<List<User>> usersResponse = userClient.getUsersList();
 
         Assertions.assertAll(
-                () -> Assertions.assertEquals(CREATED_STATUS, postUserStatusCode),
-                () -> Assertions.assertTrue(getUsersResponse.getBody().contains(user))
+                () -> Assertions.assertEquals(CREATED_STATUS, responseStatusCode),
+                () -> Assertions.assertTrue(usersResponse.getBody().contains(user))
         );
     }
 
@@ -70,29 +70,30 @@ public class AddUserTest {
                 .sex(faker.demographic().sex().toUpperCase())
                 .zipCode(faker.number().digits(5))
                 .build();
-        int postUserStatusCode = userClient.addToUsersList(user);
-        Response<List<User>> getUsersResponse = userClient.getUsersList();
+        int responseStatusCode = userClient.addToUsersList(user);
+        Response<List<User>> usersResponse = userClient.getUsersList();
 
         Assertions.assertAll(
-                () -> Assertions.assertEquals(DEPENDENCY_STATUS, postUserStatusCode),
-                () -> Assertions.assertFalse(getUsersResponse.getBody().contains(user))
+                () -> Assertions.assertEquals(DEPENDENCY_STATUS, responseStatusCode),
+                () -> Assertions.assertFalse(usersResponse.getBody().contains(user))
         );
     }
 
     // Scenario #4:
     @Test
     void addDuplicateUserTest() throws IOException {
-        Response<List<User>> getUsersResponse = userClient.getUsersList();
-        List<User> usersList = getUsersResponse.getBody();
+        Response<List<User>> usersResponse = userClient.getUsersList();
+        List<User> usersList = usersResponse.getBody();
         User user = User.builder()
                 .name(usersList.get(0).getName())
                 .sex(usersList.get(0).getSex())
                 .build();
-        int postUserStatusCode = userClient.addToUsersList(user);
+        int responseStatusCode = userClient.addToUsersList(user);
+        List<User> finalUsersList = userClient.getUsersList().getBody();
 
         Assertions.assertAll(
-                () -> Assertions.assertEquals(BAD_STATUS, postUserStatusCode),
-                () -> Assertions.assertFalse(usersList.contains(user))
+                () -> Assertions.assertEquals(BAD_STATUS, responseStatusCode),
+                () -> Assertions.assertFalse(finalUsersList.contains(user))
         );
     }
 }
