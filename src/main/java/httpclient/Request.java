@@ -70,13 +70,7 @@ public class Request {
 
     public Request setBody(String body) throws UnsupportedEncodingException {
         StringEntity entity = new StringEntity(body);
-        ((HttpPost) request).setEntity(entity);
-        return this;
-    }
-
-    public Request setPatchBody(String body) throws UnsupportedEncodingException {
-        StringEntity entity = new StringEntity(body);
-        ((HttpPatch) request).setEntity(entity);
+        ((HttpEntityEnclosingRequestBase) request).setEntity(entity);
         return this;
     }
 

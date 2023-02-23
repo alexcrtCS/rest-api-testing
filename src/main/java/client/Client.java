@@ -39,7 +39,7 @@ public class Client {
                 .patchRequest(URL + resource)
                 .setHeader("Content-Type", "application/json")
                 .setBearerAuthentication(Authentication.getToken(Scope.WRITE))
-                .setPatchBody(body)
+                .setBody(body)
                 .executeRequest();
     }
 }
