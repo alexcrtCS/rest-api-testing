@@ -74,6 +74,12 @@ public class Request {
         return this;
     }
 
+    public Request setPatchBody(String body) throws UnsupportedEncodingException {
+        StringEntity entity = new StringEntity(body);
+        ((HttpPatch) request).setEntity(entity);
+        return this;
+    }
+
     public Request setParameter(String key, String value) throws URISyntaxException {
         URI uri = new URIBuilder(request.getRequestLine().getUri()).addParameter(key, value).build();
         ((HttpRequestBase) request).setURI(uri);
