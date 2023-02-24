@@ -6,6 +6,7 @@ public class Constants {
     public static final String ZIPCODES_RESOURCE = "/zip-codes";
     public static final String ZIPCODES_EXPAND_RESOURCE = "/zip-codes/expand";
     public static final String USERS_RESOURCE = "/users";
+    public static final String USERS_UPLOAD_RESOURCE = "/users/upload";
     public static final String USERNAME = "0oa157tvtugfFXEhU4x7";
     public static final String PASSWORD = "X7eBCXqlFC7x-mjxG5H91IRv_Bqe1oq7ZwXNA8aq";
     public static final int OK_STATUS = 200;
