@@ -2,6 +2,7 @@ import client.UserClient;
 import client.ZipCodeClient;
 import com.github.javafaker.Faker;
 import data.User;
+import io.qameta.allure.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -12,6 +13,8 @@ import java.util.List;
 import static data.Constants.CONFLICT_STATUS;
 import static data.Constants.NO_CONTENT_STATUS;
 
+@Epic("User Management")
+@Story("Deleting Users")
 public class DeleteUserTest {
     private static UserClient userClient;
     private static ZipCodeClient zipCodeClient;
@@ -33,12 +36,16 @@ public class DeleteUserTest {
 
     // Scenario #1:
     @Test
+    @AllureId("API-16")
+    @Feature("Ability to Delete User")
+    @Description("Check if user is successfully removed")
     void deleteCompleteUserTest() throws IOException {
         int response = userClient.deleteUser(user);
         List<User> userList = userClient.getUsersList().getBody();
         String zipCode = user.getZipCode();
         List<String> zipCodeList = zipCodeClient.getZipCodesList().getBody();
 
+        Allure.addAttachment("User Details", user.toString());
         Assertions.assertAll(
                 () -> Assertions.assertEquals(NO_CONTENT_STATUS, response),
                 () -> Assertions.assertFalse(userList.contains(user)),
@@ -48,6 +55,10 @@ public class DeleteUserTest {
 
     // Scenario #2:
     @Test
+    @Issue("7")
+    @AllureId("API-17")
+    @Feature("Ability to Delete User with Required Fields")
+    @Description("Check if user is successfully removed by only required fields")
     void deleteRequiredUserTest() throws IOException {
         User userToDelete = User.builder()
                 .name(user.getName())
@@ -58,6 +69,7 @@ public class DeleteUserTest {
         String zipCode = user.getZipCode();
         List<String> zipCodeList = zipCodeClient.getZipCodesList().getBody();
 
+        Allure.addAttachment("User Details", userToDelete.toString());
         Assertions.assertAll(
                 () -> Assertions.assertEquals(NO_CONTENT_STATUS, response),
                 () -> Assertions.assertFalse(userList.contains(user)),
@@ -67,6 +79,9 @@ public class DeleteUserTest {
 
     // Scenario #3:
     @Test
+    @AllureId("API-18")
+    @Feature("Inability to Delete User without Required Fields")
+    @Description("Check if user without required fields is not removed")
     void deleteIncompleteUserTest() throws IOException {
         User userToDelete = User.builder()
                 .name(user.getName())
@@ -78,6 +93,7 @@ public class DeleteUserTest {
         String zipCode = user.getZipCode();
         List<String> zipCodeList = zipCodeClient.getZipCodesList().getBody();
 
+        Allure.addAttachment("User Details", userToDelete.toString());
         Assertions.assertAll(
                 () -> Assertions.assertEquals(CONFLICT_STATUS, response),
                 () -> Assertions.assertTrue(userList.contains(user)),

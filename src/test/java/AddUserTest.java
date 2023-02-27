@@ -3,6 +3,7 @@ import client.ZipCodeClient;
 import com.github.javafaker.Faker;
 import data.Response;
 import data.User;
+import io.qameta.allure.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -12,6 +13,8 @@ import java.util.List;
 
 import static data.Constants.*;
 
+@Epic("User Management")
+@Story("Adding Users")
 public class AddUserTest {
     private static UserClient userClient;
     private static ZipCodeClient zipCodeClient;
@@ -26,6 +29,9 @@ public class AddUserTest {
 
     // Scenario #1:
     @Test
+    @AllureId("API-5")
+    @Feature("Ability to Add New User")
+    @Description("Check if new user is successfully added")
     void addUserTest() throws IOException {
         String zipCode = zipCodeClient.getNewZipCode();
         User user = User.builder()
@@ -38,6 +44,7 @@ public class AddUserTest {
         Response<List<User>> usersResponse = userClient.getUsersList();
         Response<List<String>> zipCodesResponse = zipCodeClient.getZipCodesList();
 
+        Allure.addAttachment("User Details", user.toString());
         Assertions.assertAll(
                 () -> Assertions.assertEquals(CREATED_STATUS, responseStatusCode),
                 () -> Assertions.assertTrue(usersResponse.getBody().contains(user)),
@@ -47,6 +54,9 @@ public class AddUserTest {
 
     // Scenario #2:
     @Test
+    @AllureId("API-6")
+    @Feature("Ability to Add New User With Required Fields")
+    @Description("Check if new user with only required fields is successfully added")
     void addRequiredUserTest() throws IOException {
         User user = User.builder()
                 .name(faker.name().firstName())
@@ -55,6 +65,7 @@ public class AddUserTest {
         int responseStatusCode = userClient.addToUsersList(user);
         Response<List<User>> usersResponse = userClient.getUsersList();
 
+        Allure.addAttachment("User Details", user.toString());
         Assertions.assertAll(
                 () -> Assertions.assertEquals(CREATED_STATUS, responseStatusCode),
                 () -> Assertions.assertTrue(usersResponse.getBody().contains(user))
@@ -63,6 +74,9 @@ public class AddUserTest {
 
     // Scenario #3:
     @Test
+    @AllureId("API-7")
+    @Feature("Inability to Add New User With Unavailable Zip Code")
+    @Description("Check if new user with unavailable zip code is not added")
     void addUnavailableUserTest() throws IOException {
         User user = User.builder()
                 .name(faker.name().firstName())
@@ -73,6 +87,7 @@ public class AddUserTest {
         int responseStatusCode = userClient.addToUsersList(user);
         Response<List<User>> usersResponse = userClient.getUsersList();
 
+        Allure.addAttachment("User Details", user.toString());
         Assertions.assertAll(
                 () -> Assertions.assertEquals(DEPENDENCY_STATUS, responseStatusCode),
                 () -> Assertions.assertFalse(usersResponse.getBody().contains(user))
@@ -81,6 +96,10 @@ public class AddUserTest {
 
     // Scenario #4:
     @Test
+    @Issue("4")
+    @AllureId("API-8")
+    @Feature("Inability to Add Duplicate User")
+    @Description("Check if duplicate user is not added")
     void addDuplicateUserTest() throws IOException {
         Response<List<User>> usersResponse = userClient.getUsersList();
         List<User> usersList = usersResponse.getBody();
@@ -91,6 +110,7 @@ public class AddUserTest {
         int responseStatusCode = userClient.addToUsersList(user);
         List<User> finalUsersList = userClient.getUsersList().getBody();
 
+        Allure.addAttachment("User Details", user.toString());
         Assertions.assertAll(
                 () -> Assertions.assertEquals(BAD_STATUS, responseStatusCode),
                 () -> Assertions.assertFalse(finalUsersList.contains(user))
