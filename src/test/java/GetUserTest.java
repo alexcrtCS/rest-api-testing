@@ -59,7 +59,6 @@ public class GetUserTest {
         List<User> userList = allUsersResponse.getBody()
                 .stream().filter(user -> user.getAge() > ageLimit).collect(Collectors.toList());
 
-        Allure.addAttachment("User Filter", "Older Than: " + ageLimit);
         Assertions.assertAll(
                 () -> Assertions.assertEquals(OK_STATUS, filteredUsersResponse.getStatusCode()),
                 () -> Assertions.assertTrue(filteredUsersResponse.getBody().containsAll(userList))
@@ -78,7 +77,6 @@ public class GetUserTest {
         List<User> userList = allUsersResponse.getBody()
                 .stream().filter(user -> user.getAge() < ageLimit).collect(Collectors.toList());
 
-        Allure.addAttachment("User Filter", "Younger Than: " + ageLimit);
         Assertions.assertAll(
                 () -> Assertions.assertEquals(OK_STATUS, filteredUsersResponse.getStatusCode()),
                 () -> Assertions.assertTrue(filteredUsersResponse.getBody().containsAll(userList))
@@ -97,7 +95,6 @@ public class GetUserTest {
         List<User> userList = allUsersResponse.getBody()
                 .stream().filter(user -> user.getSex().equals(sex)).collect(Collectors.toList());
 
-        Allure.addAttachment("User Filter", "Sex: " + sex);
         Assertions.assertAll(
                 () -> Assertions.assertEquals(OK_STATUS, filteredUsersResponse.getStatusCode()),
                 () -> Assertions.assertTrue(filteredUsersResponse.getBody().containsAll(userList))

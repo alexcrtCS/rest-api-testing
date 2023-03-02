@@ -44,7 +44,6 @@ public class AddUserTest {
         Response<List<User>> usersResponse = userClient.getUsersList();
         Response<List<String>> zipCodesResponse = zipCodeClient.getZipCodesList();
 
-        Allure.addAttachment("User Details", user.toString());
         Assertions.assertAll(
                 () -> Assertions.assertEquals(CREATED_STATUS, responseStatusCode),
                 () -> Assertions.assertTrue(usersResponse.getBody().contains(user)),
@@ -65,7 +64,6 @@ public class AddUserTest {
         int responseStatusCode = userClient.addToUsersList(user);
         Response<List<User>> usersResponse = userClient.getUsersList();
 
-        Allure.addAttachment("User Details", user.toString());
         Assertions.assertAll(
                 () -> Assertions.assertEquals(CREATED_STATUS, responseStatusCode),
                 () -> Assertions.assertTrue(usersResponse.getBody().contains(user))
@@ -87,7 +85,6 @@ public class AddUserTest {
         int responseStatusCode = userClient.addToUsersList(user);
         Response<List<User>> usersResponse = userClient.getUsersList();
 
-        Allure.addAttachment("User Details", user.toString());
         Assertions.assertAll(
                 () -> Assertions.assertEquals(DEPENDENCY_STATUS, responseStatusCode),
                 () -> Assertions.assertFalse(usersResponse.getBody().contains(user))
@@ -110,7 +107,6 @@ public class AddUserTest {
         int responseStatusCode = userClient.addToUsersList(user);
         List<User> finalUsersList = userClient.getUsersList().getBody();
 
-        Allure.addAttachment("User Details", user.toString());
         Assertions.assertAll(
                 () -> Assertions.assertEquals(BAD_STATUS, responseStatusCode),
                 () -> Assertions.assertFalse(finalUsersList.contains(user))

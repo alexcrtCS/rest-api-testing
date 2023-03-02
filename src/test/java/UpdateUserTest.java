@@ -50,7 +50,6 @@ public class UpdateUserTest {
         int response = userClient.updateUser(new UserPair(newUser, userToChange));
         List<User> userList = userClient.getUsersList().getBody();
 
-        Allure.addAttachment("User Details", newUser.toString());
         Assertions.assertAll(
                 () -> Assertions.assertEquals(OK_STATUS, response),
                 () -> Assertions.assertFalse(userList.contains(userToChange)),
@@ -74,7 +73,6 @@ public class UpdateUserTest {
         int response = userClient.updateUser(new UserPair(newUser, userToChange));
         List<User> userList = userClient.getUsersList().getBody();
 
-        Allure.addAttachment("User Details", newUser.toString());
         Assertions.assertAll(
                 () -> Assertions.assertEquals(DEPENDENCY_STATUS, response),
                 () -> Assertions.assertFalse(userList.contains(newUser)),
@@ -96,7 +94,6 @@ public class UpdateUserTest {
         int response = userClient.updateUser(new UserPair(newUser, userToChange));
         List<User> userList = userClient.getUsersList().getBody();
 
-        Allure.addAttachment("User Details", newUser.toString());
         Assertions.assertAll(
                 () -> Assertions.assertEquals(CONFLICT_STATUS, response),
                 () -> Assertions.assertFalse(userList.contains(newUser)),

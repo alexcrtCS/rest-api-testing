@@ -33,6 +33,7 @@ public class ZipCodeTest {
     @Description("Check if zip codes list is successfully returned")
     void getZipCodesTest() throws IOException {
         Response<List<String>> response = client.getZipCodesList();
+
         Assertions.assertAll(
                 () -> Assertions.assertTrue(response.getBody().containsAll(AVAILABLE_ZIP_CODES)),
                 () -> Assertions.assertEquals(OK_STATUS, response.getStatusCode())
@@ -49,7 +50,6 @@ public class ZipCodeTest {
                 new Faker().number().digits(5), new Faker().number().digits(5));
         Response<List<String>> response = client.addToZipCodesList(newZipCodesList);
 
-        Allure.addAttachment("New Zip Codes", newZipCodesList.toString());
         Assertions.assertAll(
                 () -> Assertions.assertTrue(response.getBody().containsAll(newZipCodesList)),
                 () -> Assertions.assertEquals(CREATED_STATUS, response.getStatusCode())
@@ -67,7 +67,6 @@ public class ZipCodeTest {
         List<String> duplicatedZipCodesList = Arrays.asList(randomZipCode, randomZipCode);
         Response<List<String>> response = client.addToZipCodesList(duplicatedZipCodesList);
 
-        Allure.addAttachment("New Zip Codes", duplicatedZipCodesList.toString());
         Assertions.assertAll(
                 () -> Assertions.assertTrue(response.getBody().stream().allMatch(new HashSet<>()::add)),
                 () -> Assertions.assertEquals(CREATED_STATUS, response.getStatusCode())
@@ -84,7 +83,6 @@ public class ZipCodeTest {
         List<String> usedZipCodesList = Arrays.asList("12345", "23456");
         Response<List<String>> response = client.addToZipCodesList(usedZipCodesList);
 
-        Allure.addAttachment("New Zip Codes", usedZipCodesList.toString());
         Assertions.assertAll(
                 () -> usedZipCodesList.forEach(zipCode ->
                         Assertions.assertEquals(1, response.getBody().stream()

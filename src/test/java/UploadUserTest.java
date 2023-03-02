@@ -49,7 +49,6 @@ public class UploadUserTest {
         int statusCode = userClient.uploadUser(file, "validUsers.json");
         List<User> finalUserList = userClient.getUsersList().getBody();
 
-        Allure.addAttachment("Users File", new FileInputStream(file));
         Assertions.assertAll(
                 () -> Assertions.assertEquals(CREATED_STATUS, statusCode),
                 () -> Assertions.assertEquals(userList, finalUserList)
@@ -68,7 +67,6 @@ public class UploadUserTest {
         int statusCode = userClient.uploadUser(file, "invalidZipUsers.json");
         List<User> finalUserList = userClient.getUsersList().getBody();
 
-        Allure.addAttachment("Users File", new FileInputStream(file));
         Assertions.assertAll(
                 () -> Assertions.assertEquals(DEPENDENCY_STATUS, statusCode),
                 () -> Assertions.assertTrue(Collections.disjoint(finalUserList, userList))
@@ -87,7 +85,6 @@ public class UploadUserTest {
         int statusCode = userClient.uploadUser(file, "incompleteUsers.json");
         List<User> finalUserList = userClient.getUsersList().getBody();
 
-        Allure.addAttachment("Users File", new FileInputStream(file));
         Assertions.assertAll(
                 () -> Assertions.assertEquals(CONFLICT_STATUS, statusCode),
                 () -> Assertions.assertTrue(Collections.disjoint(finalUserList, userList))

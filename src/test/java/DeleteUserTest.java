@@ -45,7 +45,6 @@ public class DeleteUserTest {
         String zipCode = user.getZipCode();
         List<String> zipCodeList = zipCodeClient.getZipCodesList().getBody();
 
-        Allure.addAttachment("User Details", user.toString());
         Assertions.assertAll(
                 () -> Assertions.assertEquals(NO_CONTENT_STATUS, response),
                 () -> Assertions.assertFalse(userList.contains(user)),
@@ -69,7 +68,6 @@ public class DeleteUserTest {
         String zipCode = user.getZipCode();
         List<String> zipCodeList = zipCodeClient.getZipCodesList().getBody();
 
-        Allure.addAttachment("User Details", userToDelete.toString());
         Assertions.assertAll(
                 () -> Assertions.assertEquals(NO_CONTENT_STATUS, response),
                 () -> Assertions.assertFalse(userList.contains(user)),
@@ -93,7 +91,6 @@ public class DeleteUserTest {
         String zipCode = user.getZipCode();
         List<String> zipCodeList = zipCodeClient.getZipCodesList().getBody();
 
-        Allure.addAttachment("User Details", userToDelete.toString());
         Assertions.assertAll(
                 () -> Assertions.assertEquals(CONFLICT_STATUS, response),
                 () -> Assertions.assertTrue(userList.contains(user)),
